@@ -8,7 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
-import CastleIcon from "@mui/icons-material/Castle";
+import PaletteIcon from "@mui/icons-material/Palette";
 import Avatar from "@mui/material/Avatar";
 import { useSelector, useDispatch } from "react-redux";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -92,7 +92,7 @@ const NavbarComp = () => {
             color={"white"}
             style={{ textDecoration: "none" }}
           >
-            <CastleIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <PaletteIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           </Typography>
           <Box
             sx={{
@@ -111,7 +111,7 @@ const NavbarComp = () => {
                 />
               </MenuItem>
             )}
-            {payload && payload.biz && (
+            {payload && payload.isAdmin && (
               <MenuItem>
                 <NavLinkComponent url={ROUTES.MYCARDS} label={"My Cards"} />
               </MenuItem>
@@ -125,6 +125,10 @@ const NavbarComp = () => {
           <MobileMenuPartial
             pages={[
               {
+                url: ROUTES.HOME,
+                label: "Home",
+              },
+              {
                 url: ROUTES.ABOUT,
                 label: "About Us",
               },
@@ -133,7 +137,7 @@ const NavbarComp = () => {
                 label: "Favourites",
               },
               payload &&
-                payload.biz && {
+                payload.isAdmin && {
                   url: ROUTES.MYCARDS,
                   label: "My-Cards",
                 },

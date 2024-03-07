@@ -4,8 +4,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -19,9 +17,7 @@ import { fieldValidation } from "../../validation/fieldValidation";
 import ROUTES from "../../routes/ROUTES";
 import CancelBtnComp from "../../components/CancelBtn";
 
-const initialFormState = {
-  biz: false,
-};
+const initialFormState = {};
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState(initialFormState);
@@ -79,8 +75,9 @@ const RegisterPage = () => {
       toast.info("Error");
       return;
     }
-    try {
-      await axios.post("/users/register", formData);
+    try { 
+      formData.email= formData.email.toLowerCase();
+      await axios.post("/users", formData);
       toast.success(`Registration success`);
       navigate(ROUTES.LOGIN);
     } catch (err) {
@@ -125,21 +122,6 @@ const RegisterPage = () => {
                 </Typography>
               </Grid>
             ))}
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formData.isBusinessUser}
-                    color="primary"
-                    name="biz"
-                    id="biz"
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                  />
-                }
-                label="Register as business user"
-              />
-            </Grid>
             <Grid item xs={12} sm={6}>
               <Button
                 type="submit"

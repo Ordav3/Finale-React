@@ -2,31 +2,37 @@ import Joi from "joi";
 
 export const registerFields = [
   {
-    label: "First Name",
-    name: "firstName",
-    id: "firstName",
-    type: "text",
-    sm: 6,
-    required: true,
-    joi: Joi.string().min(2).max(15).required(),
+    "label": "First Name",
+    "name": "firstName",
+    "id": "firstName",
+    "type": "text",
+    "sm": 6,
+    "required": true,
+    "joi": Joi.string().regex(/^[^0-9]*$/).min(2).max(15).required().messages({
+      "string.pattern.base": `"First Name" must not include numbers`
+    })
   },
   {
-    label: "Middle Name",
-    name: "middleName",
-    id: "middleName",
-    type: "text",
-    sm: 6,
-    required: false,
-    joi: Joi.string().min(2).max(15).allow(""),
+    "label": "Middle Name",
+    "name": "middleName",
+    "id": "middleName",
+    "type": "text",
+    "sm": 6,
+    "required": false,
+    "joi": Joi.string().regex(/^[^0-9]*$/).min(2).max(15).allow("").messages({
+      "string.pattern.base": `"Middle Name" must not include numbers`
+    })
   },
   {
-    label: "Last Name",
-    name: "lastName",
-    id: "lastName",
-    type: "text",
-    sm: 6,
-    required: true,
-    joi: Joi.string().min(2).max(15).required(),
+    "label": "Last Name",
+    "name": "lastName",
+    "id": "lastName",
+    "type": "text",
+    "sm": 6,
+    "required": true,
+    "joi": Joi.string().regex(/^[^0-9]*$/).min(2).max(15).required().messages({
+      "string.pattern.base": `"Last Name" must not include numbers`
+    })
   },
   {
     label: "Phone",

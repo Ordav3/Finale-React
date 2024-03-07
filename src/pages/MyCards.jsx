@@ -30,50 +30,70 @@ const MyCardsPage = () => {
   const theme = useTheme();
   const qparams = useQueryParams();
   const payload = useSelector((state) => state.authSlice.payload);
-
+  
   useEffect(() => {
+    const filterFunc = (data) => {
+      if (!originalCardsArr && !data) {
+        return;
+      }
+      let filter = "";
+      if (!originalCardsArr && data) {
+        setOriginalCardsArr(data);
+        setCardsState(
+          data.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+        return;
+      }
+      if (originalCardsArr) {
+        let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+        setCardsState(
+          newOriginalCardsArr.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+      }
+    };
     (async () => {
-      const { data } = await axios.get("/cards/cards");
+      const { data } = await axios.get("/cards");
       const filterdData = data.filter((card) => card.user_id === payload._id);
       filterFunc(filterdData);
     })();
-  }, []);
+  }, [payload._id,originalCardsArr]);
 
   useEffect(() => {
+    const filterFunc = () => {
+      if (!originalCardsArr) {
+        return;
+      }
+      let filter = "";
+      if (qparams.filter) {
+        filter = qparams.filter;
+      }
+      if (originalCardsArr) {
+        let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+        setCardsState(
+          newOriginalCardsArr.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+      }
+    };
     filterFunc();
-  }, [qparams.filter]);
+  }, [qparams.filter,originalCardsArr]);
 
-  const filterFunc = (data) => {
-    if (!originalCardsArr && !data) {
-      return;
-    }
-    let filter = "";
-    if (qparams.filter) {
-      filter = qparams.filter;
-    }
-    if (!originalCardsArr && data) {
-      setOriginalCardsArr(data);
-      setCardsState(
-        data.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-      return;
-    }
-    if (originalCardsArr) {
-      let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
-      setCardsState(
-        newOriginalCardsArr.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-    }
-  };
+  
 
   const deleteFromDisplay = (id) => {
-    setCardsState(cardsState.filter((card) => card._id !== id));
+    const updatedOriginalCardsArr = originalCardsArr.filter(card => card._id !== id);
+    const updatedCardsState = cardsState.filter(card => card._id !== id);
+  
+    setOriginalCardsArr(updatedOriginalCardsArr);
+    setCardsState(updatedCardsState);
   };
 
   const handleClickOpen = () => {
@@ -85,7 +105,6 @@ const MyCardsPage = () => {
   };
 
   const handleClose = (newCard) => {
-    console.log("newCard", newCard);
     setAddDialogOpen(false);
     window.location.reload();
   };
@@ -119,9 +138,10 @@ const MyCardsPage = () => {
           justifyContent={"flex-start"}
           alignItems={"center"}
         >
+          
           {cardsState ? (
             cardsState.map((card) => (
-              <Grid item md={4} xs={12} key={`bizCrd-${card._id}`}>
+              <Grid item md={4} xs={12} key={card._id}> 
                 <CardComponent
                   cardFromParent={card}
                   onUnMark={() => {}}

@@ -30,11 +30,7 @@ const Router = () => {
       <Route
         path={ROUTES.MYCARDS}
         element={
-          <PayloadProtectedRoute
-            isBiz={true}
-            isAdmin={false}
-            element={<MyCardsPage />}
-          />
+          <PayloadProtectedRoute isAdmin={true} element={<MyCardsPage />} />
         }
       />
       <Route

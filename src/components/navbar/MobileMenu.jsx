@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useTheme } from "@mui/styles";
+import { useTheme } from "@mui/material/styles";
 import NavLinkComponent from "./NavLink";
 
 const MobileMenuPartial = ({ pages }) => {
@@ -17,7 +17,6 @@ const MobileMenuPartial = ({ pages }) => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   return (
     <Box
       sx={{

@@ -7,12 +7,13 @@ import {
 } from "@mui/material";
 
 const DialogPartial = ({ card, likes }) => {
+  
   return (
     <Fragment>
       <DialogTitle style={{ textAlign: "center" }}>{card.title}</DialogTitle>
       <DialogContent>
-        {card.image && (
-          <img src={card.image.url} alt={card.image.alt} width={"100%"} />
+        {card.url && (
+          <img src={card.url} alt={card.alt} width={"100%"} />
         )}
         {card.subTitle && (
           <Typography variant="subtitle1" gutterBottom>
@@ -44,12 +45,6 @@ const DialogPartial = ({ card, likes }) => {
             {card.web}
           </DialogContentText>
         )}
-        {card.bizNumber && (
-          <DialogContentText>
-            <b>Biz Number:</b> {card.bizNumber}
-          </DialogContentText>
-        )}
-
         {card.createdAt && (
           <DialogContentText>
             <b>Created At:</b> {new Date(card.createdAt).toLocaleDateString()}

@@ -75,7 +75,8 @@ const CardForm = ({ onClose, edit, card }) => {
         onClose(newCard);
         toast.success(`${formData.title} card edited`);
       } else {
-        onClose((await axios.post("/cards", formData)).data);
+        let card = (await axios.post("/cards", formData)).data;
+        onClose(card);
         toast.success(`${formData.title} card added`);
       }
     } catch (err) {

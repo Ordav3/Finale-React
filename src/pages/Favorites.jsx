@@ -10,49 +10,66 @@ const FavoritesPage = () => {
   const [cardsState, setCardsState] = useState(null);
   let qparams = useQueryParams();
   const payload = useSelector((state) => state.authSlice.payload);
-
+  
   useEffect(() => {
+    const filterFunc = (data) => {
+      if (!originalCardsArr && !data) {
+        return;
+      }
+      let filter = "";
+      if (!originalCardsArr && data) {
+        setOriginalCardsArr(data);
+        setCardsState(
+          data.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+        return;
+      }
+      if (originalCardsArr) {
+        let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+        setCardsState(
+          newOriginalCardsArr.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+      }
+    };
     (async () => {
-      const { data } = await axios.get("/cards/cards");
-      const filterdData = data.filter((card) =>
+      const { data } = await axios.get("/cards/fav");
+
+      const filterdData = data.likedCards.filter((card) =>
         card.likes.includes(payload._id)
       );
       filterFunc(filterdData);
     })();
-  }, []);
+  }, [payload._id,originalCardsArr]);
 
   useEffect(() => {
+    const filterFunc = () => {
+      if (!originalCardsArr) {
+        return;
+      }
+      let filter = "";
+      if (qparams.filter) {
+        filter = qparams.filter;
+      }
+      if (originalCardsArr) {
+        let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+        setCardsState(
+          newOriginalCardsArr.filter(
+            (card) =>
+              card.title.toLowerCase().startsWith(filter.toLowerCase())
+          )
+        );
+      }
+    };
     filterFunc();
-  }, [qparams.filter]);
+  }, [qparams.filter,originalCardsArr]);
 
-  const filterFunc = (data) => {
-    if (!originalCardsArr && !data) {
-      return;
-    }
-    let filter = "";
-    if (qparams.filter) {
-      filter = qparams.filter;
-    }
-    if (!originalCardsArr && data) {
-      setOriginalCardsArr(data);
-      setCardsState(
-        data.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-      return;
-    }
-    if (originalCardsArr) {
-      let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
-      setCardsState(
-        newOriginalCardsArr.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-    }
-  };
+  
 
   const deleteFromDisplay = (id) => {
     setCardsState(cardsState.filter((card) => card._id !== id));
@@ -74,7 +91,7 @@ const FavoritesPage = () => {
         >
           {cardsState ? (
             cardsState.map((card) => (
-              <Grid item md={4} xs={12} key={`bizCrd-${card._id}`}>
+              <Grid item md={4} xs={12} key={card._id}>
                 <CardComponent
                   cardFromParent={card}
                   onUnMark={deleteFromDisplay}

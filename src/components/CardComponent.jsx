@@ -56,7 +56,7 @@ const CardComponent = ({ cardFromParent, onUnMark, onDelete }) => {
 
   const handleLikeClick = async () => {
     try {
-      await axios.patch(`/cards/card-like/${card._id}`);
+      await axios.patch(`/cards/${card._id}`);
       if (!isMarked) {
         setUpdateLikes(updateLikes + 1);
       } else {
@@ -66,7 +66,6 @@ const CardComponent = ({ cardFromParent, onUnMark, onDelete }) => {
 
       setIsMarked(!isMarked);
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -89,14 +88,6 @@ const CardComponent = ({ cardFromParent, onUnMark, onDelete }) => {
       setCard(newCard);
     }
   };
-  const handleGanarateBizNum = async () => {
-    try {
-      setCard((await axios.patch(`/cards/bizNumber/${card._id}`)).data);
-      setUpdateLikes(0);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   if (!card) {
     return <CircularProgress />;
@@ -105,7 +96,7 @@ const CardComponent = ({ cardFromParent, onUnMark, onDelete }) => {
     <React.Fragment>
       <Card square raised>
         <CardActionArea onClick={openCardDescription}>
-          <CardMedia component="img" title="Alt text" image={card.image.url} />
+          <CardMedia component="img" title="Alt text" image={card.url} />
           {isMyCard && (
             <div style={{ display: "flex", justifyContent: "center" }}>
               <ColorLensIcon fontSize="large" style={{ color: "orange" }} />
@@ -151,9 +142,6 @@ const CardComponent = ({ cardFromParent, onUnMark, onDelete }) => {
         <DialogPartial card={{ ...card }} />
         <DialogActions>
           <Button onClick={closeCardDescription}>Close</Button>
-          {payload && payload.isAdmin && (
-            <Button onClick={handleGanarateBizNum}>Ganerate BizNum</Button>
-          )}
         </DialogActions>
       </Dialog>
       <Dialog

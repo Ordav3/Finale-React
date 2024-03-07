@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useMemo,useEffect } from "react";
 import {
   Container,
   ThemeProvider,
@@ -31,11 +31,15 @@ const App = () => {
   useEffect(() => {
     loggedIn();
   }, [loggedIn]);
-
+ 
   const isDarkTheme = useSelector((bigPie) => bigPie.darkModeSlice.isDarkMode);
-
+  const theme = useMemo(() => {
+    let ttt = createTheme(isDarkTheme ? dark : light);
+    return ttt;
+  }, [isDarkTheme]);
+  
   return (
-    <ThemeProvider theme={isDarkTheme ? createTheme(dark) : createTheme(light)}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
 
       <ToastContainer

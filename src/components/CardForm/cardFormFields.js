@@ -52,14 +52,14 @@ export const cardFormFields = [
       .required(),
   },
   {
-    label: "Web",
-    name: "web",
-    id: "web",
-    type: "url",
-    sm: 12,
-    required: false,
-    joi: Joi.string().allow(""),
-  },
+    "label": "Web",
+    "name": "web",
+    "id": "web",
+    "sm": 12,
+    "required": false,
+    "joi": Joi.string().regex(/^(https?:\/\/)?www\..+/i).allow("").messages({
+      "string.pattern.base": `"Web" must be a valid URL or start with 'www.'`
+    })},
   {
     label: "Image Alt",
     name: "alt",
@@ -130,13 +130,5 @@ export const cardFormFields = [
     required: true,
     joi: Joi.number().required(),
   },
-  {
-    label: "Zip",
-    name: "zip",
-    id: "zipCode",
-    type: "number",
-    sm: 4,
-    required: false,
-    joi: Joi.number().min(1).max(99999999).allow(""),
-  },
+ 
 ];

@@ -20,6 +20,7 @@ import userFields from "../utils/userFields";
 import ROUTES from "../routes/ROUTES";
 import CancelBtnComp from "../components/CancelBtn";
 import useLoggedIn from "../hooks/useLoggedIn";
+import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
   const [formData, setFormData] = useState({});
@@ -28,14 +29,16 @@ const ProfilePage = () => {
   const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
   const loggedIn = useLoggedIn();
-
+  const payload = useSelector((bigPie) => bigPie.authSlice.payload);
+ 
   useEffect(() => {
     (async () => {
       try {
+        
         const { data } = await axios.get("/users/userInfo");
         setFormData(data);
       } catch (err) {
-        console.log(err);
+        toast.error(err.response.data);
       }
     })();
   }, []);
@@ -91,16 +94,11 @@ const ProfilePage = () => {
       return;
     }
     try {
-      localStorage.setItem(
-        "token",
-        (await axios.put("/users/userInfo", userFields(formData))).data.token
-      );
-      loggedIn();
+      await axios.put("/users/userInfo/"+payload._id, userFields(formData));
       toast.success(`Success`);
       navigate(ROUTES.HOME);
     } catch (err) {
-      console.log(err);
-      toast.error(err.response.data);
+      toast.error('Something went wrong, please try again later');
     }
   };
 
@@ -146,19 +144,7 @@ const ProfilePage = () => {
               )
             )}
             <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formData.biz ? true : false}
-                    color="primary"
-                    name="biz"
-                    id="biz"
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                  />
-                }
-                label="Business user"
-              />
+
             </Grid>
             <Grid item xs={12} sm={6}>
               <Button
