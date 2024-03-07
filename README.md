@@ -17,15 +17,15 @@ npm install
 
 ### Usage
 
-Start the express server:
+Start the express server:  <br>
 npm start
 
 ### Administrator user:
-User email: adamb@gmail.com
-Password: Aa1234567*
+User email: adamb@gmail.com  <br>
+Password: Aa1234567*    
 
 ### Normal user:
-User email: israel@gmail.com
+User email: israel@gmail.com    <br>
 Password: Er@12345
 
 
